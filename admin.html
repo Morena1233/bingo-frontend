@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin | Bingo</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin">
+
+  <h1>🔐 PAINEL ADMINISTRATIVO</h1>
+
+  <label>Valor da cartela (R$)</label>
+  <input type="number" id="valor" value="10">
+
+  <label>Horário do sorteio</label>
+  <input type="time" id="horario">
+
+  <button onclick="salvarConfig()">Salvar Configuração</button>
+
+  <p id="status"></p>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
