@@ -105,3 +105,5 @@ document.addEventListener("DOMContentLoaded", function () {
   carregar();
 
 });
+document.body.classList.add("bingo-final");
+
