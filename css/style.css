@@ -47,5 +47,26 @@ button {
     opacity: 1;
   }
 }
+.lista-numeros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+}
+
+.numero-sorteado {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #222;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(255,215,0,0.6);
+}
+
 
 
