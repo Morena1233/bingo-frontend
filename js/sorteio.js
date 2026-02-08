@@ -1,33 +1,6 @@
-// ===== LOCAL STORAGE =====
-function salvarEstado() {
-  localStorage.setItem("numerosDisponiveis", JSON.stringify(numerosDisponiveis));
-  localStorage.setItem("numerosSorteados", JSON.stringify(numerosSorteados));
-}
-
-function carregarEstado() {
-  const disponiveis = localStorage.getItem("numerosDisponiveis");
-  const sorteados = localStorage.getItem("numerosSorteados");
-
-  if (disponiveis && sorteados) {
-    numerosDisponiveis = JSON.parse(disponiveis);
-    numerosSorteados = JSON.parse(sorteados);
-  }
-}
-
 document.addEventListener("DOMContentLoaded", function () {
-  carregarEstado();
 
-// reconstruir histórico visual
-numerosSorteados.forEach(numero => {
-  const item = document.createElement("div");
-  item.className = "numero-sorteado";
-  item.textContent = numero;
-  item.style.background = corPorNumero(numero);
-  lista.appendChild(item);
-});
-
-
-  // números disponíveis
+  // ===== VARIÁVEIS =====
   let numerosDisponiveis = [];
   let numerosSorteados = [];
 
@@ -39,6 +12,7 @@ numerosSorteados.forEach(numero => {
   const lista = document.getElementById("listaNumeros");
   const botao = document.getElementById("btnSortear");
 
+  // ===== CORES =====
   function corPorNumero(n) {
     if (n <= 15) return "#e74c3c";
     if (n <= 30) return "#3498db";
@@ -47,6 +21,35 @@ numerosSorteados.forEach(numero => {
     return "#9b59b6";
   }
 
+  // ===== LOCAL STORAGE =====
+  function salvarEstado() {
+    localStorage.setItem("numerosDisponiveis", JSON.stringify(numerosDisponiveis));
+    localStorage.setItem("numerosSorteados", JSON.stringify(numerosSorteados));
+  }
+
+  function carregarEstado() {
+    const disp = localStorage.getItem("numerosDisponiveis");
+    const sort = localStorage.getItem("numerosSorteados");
+
+    if (disp && sort) {
+      numerosDisponiveis = JSON.parse(disp);
+      numerosSorteados = JSON.parse(sort);
+    }
+  }
+
+  // ===== CARREGAR ESTADO AO ABRIR =====
+  carregarEstado();
+
+  // reconstruir histórico visual
+  numerosSorteados.forEach(numero => {
+    const item = document.createElement("div");
+    item.className = "numero-sorteado";
+    item.textContent = numero;
+    item.style.background = corPorNumero(numero);
+    lista.appendChild(item);
+  });
+
+  // ===== SORTEIO =====
   function sortearNumero() {
     if (numerosDisponiveis.length === 0) {
       alert("Todos os números já foram sorteados!");
@@ -58,7 +61,7 @@ numerosSorteados.forEach(numero => {
 
     numerosSorteados.push(numero);
 
-    // atualiza bola
+    // bola principal
     bola.classList.remove("bola-bingo");
     void bola.offsetWidth;
     bola.classList.add("bola-bingo");
@@ -66,14 +69,19 @@ numerosSorteados.forEach(numero => {
     bola.textContent = numero;
     bola.style.background = corPorNumero(numero);
 
-    // adiciona ao histórico
+    // histórico
     const item = document.createElement("div");
     item.className = "numero-sorteado";
     item.textContent = numero;
     item.style.background = corPorNumero(numero);
     lista.appendChild(item);
+
+    // salvar
+    salvarEstado();
   }
 
+  // ===== EVENTO =====
   botao.addEventListener("click", sortearNumero);
 
 });
+
