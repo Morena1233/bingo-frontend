@@ -80,6 +80,11 @@ document.addEventListener("DOMContentLoaded", function () {
     bola.classList.add("bola-bingo");
 
     bola.textContent = numero;
+    if (somBola) {
+  somBola.currentTime = 0;
+  somBola.play();
+}
+
     bola.style.background = corPorNumero(numero);
 
     const item = document.createElement("div");
