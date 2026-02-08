@@ -1,16 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  // ===== VARIÁVEIS =====
+  // ===== ELEMENTOS =====
+  const bola = document.getElementById("bola");
+  const lista = document.getElementById("listaNumeros");
+  const botao = document.getElementById("btnSortear");
+
+  // ===== SEGURANÇA =====
+  if (!bola || !lista || !botao) {
+    console.error("Erro: elementos não encontrados no HTML");
+    return;
+  }
+
+  // ===== DADOS =====
   let numerosDisponiveis = [];
   let numerosSorteados = [];
 
   for (let i = 1; i <= 75; i++) {
     numerosDisponiveis.push(i);
   }
-
-  const bola = document.getElementById("bola");
-  const lista = document.getElementById("listaNumeros");
-  const botao = document.getElementById("btnSortear");
 
   // ===== CORES =====
   function corPorNumero(n) {
@@ -21,35 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return "#9b59b6";
   }
 
-  // ===== LOCAL STORAGE =====
-  function salvarEstado() {
-    localStorage.setItem("numerosDisponiveis", JSON.stringify(numerosDisponiveis));
-    localStorage.setItem("numerosSorteados", JSON.stringify(numerosSorteados));
-  }
-
-  function carregarEstado() {
-    const disp = localStorage.getItem("numerosDisponiveis");
-    const sort = localStorage.getItem("numerosSorteados");
-
-    if (disp && sort) {
-      numerosDisponiveis = JSON.parse(disp);
-      numerosSorteados = JSON.parse(sort);
-    }
-  }
-
-  // ===== CARREGAR ESTADO AO ABRIR =====
-  carregarEstado();
-
-  // reconstruir histórico visual
-  numerosSorteados.forEach(numero => {
-    const item = document.createElement("div");
-    item.className = "numero-sorteado";
-    item.textContent = numero;
-    item.style.background = corPorNumero(numero);
-    lista.appendChild(item);
-  });
-
-  // ===== SORTEIO =====
+  // ===== SORTEAR =====
   function sortearNumero() {
     if (numerosDisponiveis.length === 0) {
       alert("Todos os números já foram sorteados!");
@@ -75,9 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
     item.textContent = numero;
     item.style.background = corPorNumero(numero);
     lista.appendChild(item);
-
-    // salvar
-    salvarEstado();
   }
 
   // ===== EVENTO =====
