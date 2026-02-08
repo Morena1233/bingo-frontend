@@ -1,12 +1,30 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Bingo Vem Fazer a Moeda</title>
+  <meta charset="UTF-8" />
+  <title>Bingo Online</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>🎰 Site funcionando!</h1>
-  <p>index.html carregado com sucesso.</p>
+
+  <h1>Bingo Online</h1>
+
+  <!-- Bola central -->
+  <div id="bola-container">
+    <div id="bola">?</div>
+  </div>
+
+  <!-- Botões -->
+  <div class="botoes">
+    <button id="btnSortear">Sortear Número</button>
+    <button id="btnReset">Resetar Jogo</button>
+  </div>
+
+  <!-- Histórico -->
+  <h2>Números sorteados</h2>
+  <div id="historico"></div>
+
+  <script src="js/sorteio.js"></script>
 </body>
 </html>
+
