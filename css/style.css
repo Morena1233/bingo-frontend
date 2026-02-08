@@ -1,45 +1,39 @@
 body {
-  background: radial-gradient(circle, #111, #000);
   font-family: Arial, sans-serif;
-}
-
-.sorteio-area {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60vh;
-}
-
-.bola-bingo {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 90px;
-  font-weight: bold;
+  background: #0b0f1a;
   color: #fff;
-  box-shadow:
-    inset -10px -10px 20px rgba(0,0,0,0.5),
-    inset 10px 10px 20px rgba(255,255,255,0.2),
-    0 0 40px rgba(255,255,255,0.4);
-  animation: aparecer 0.6s ease-out;
+  text-align: center;
+  padding: 20px;
 }
 
-button {
-  padding: 15px 30px;
-  font-size: 18px;
-  background: gold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+h1 {
+  margin-bottom: 20px;
+}
+
+#bola-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+#bola {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle at top, #fff, #ff0000);
+  color: #000;
+  font-size: 64px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+  animation: aparecer 0.5s ease;
 }
 
 @keyframes aparecer {
   from {
-    transform: scale(0.2);
+    transform: scale(0.5);
     opacity: 0;
   }
   to {
@@ -47,26 +41,46 @@ button {
     opacity: 1;
   }
 }
-.lista-numeros {
+
+.botoes {
+  margin: 20px 0;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#btnSortear {
+  background: #28a745;
+  color: #fff;
+}
+
+#btnReset {
+  background: #dc3545;
+  color: #fff;
+}
+
+#historico {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  padding: 15px;
+  margin-top: 20px;
 }
 
-.numero-sorteado {
+.bola-historico {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #222;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: #fff;
+  color: #000;
   font-weight: bold;
-  box-shadow: 0 0 10px rgba(255,215,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
 }
-
-
-
