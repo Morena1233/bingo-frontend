@@ -68,6 +68,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ===== SORTEAR =====
   function sortearNumero() {
+    if (numerosSorteados.length === totalNumeros) {
+  if (somBingo) {
+    somBingo.currentTime = 0;
+    somBingo.play();
+  }
+
+  alert("🎉 BINGO! Todos os números foram sorteados!");
+}
+
     if (numerosDisponiveis.length === 0) {
       alert("Todos os números já foram sorteados!");
       return;
