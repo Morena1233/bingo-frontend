@@ -1,33 +1,32 @@
-document.addEventListener("DOMContentLoaded", () => {
+let numerosDisponiveis = Array.from({ length: 75 }, (_, i) => i + 1);
 
-  let numeros = [];
+function corPorNumero(n) {
+  if (n <= 15) return "#e74c3c";   // vermelho
+  if (n <= 30) return "#3498db";   // azul
+  if (n <= 45) return "#2ecc71";   // verde
+  if (n <= 60) return "#f1c40f";   // amarelo
+  return "#9b59b6";                // roxo
+}
+
+function sortearNumero() {
+  if (numerosDisponiveis.length === 0) {
+    alert("Todos os números já foram sorteados");
+    return;
+  }
+
+  const index = Math.floor(Math.random() * numerosDisponiveis.length);
+  const numero = numerosDisponiveis.splice(index, 1)[0];
+
   const bola = document.getElementById("bola");
-  const historico = document.getElementById("historico");
 
-  window.sortear = function () {
-    if (numeros.length >= 75) {
-      alert("Todos os números já foram sorteados!");
-      return;
-    }
+  // reinicia animação
+  bola.classList.remove("bola-bingo");
+  void bola.offsetWidth;
+  bola.classList.add("bola-bingo");
 
-    let numero;
-    do {
-      numero = Math.floor(Math.random() * 75) + 1;
-    } while (numeros.includes(numero));
+  bola.textContent = numero;
+  bola.style.background = corPorNumero(numero);
+}
 
-    numeros.push(numero);
-
-    bola.classList.remove("animar");
-    void bola.offsetWidth; // reinicia animação
-    bola.classList.add("animar");
-
-    bola.innerText = numero;
-
-    const span = document.createElement("span");
-    span.innerText = numero;
-    historico.prepend(span);
-  };
-
-});
 
 
