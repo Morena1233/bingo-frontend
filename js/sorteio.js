@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const bola = document.getElementById("bola");
   const lista = document.getElementById("listaNumeros");
   const botao = document.getElementById("btnSortear");
+  const somBola = document.getElementById("somBola");
+
 
   if (!bola || !lista || !botao) {
     console.error("Elementos do HTML não encontrados");
