@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ===== ELEMENTOS =====
   const bola = document.getElementById("bola");
+  const somBingo = document.getElementById("somBingo");
+
   const lista = document.getElementById("listaNumeros");
   const botao = document.getElementById("btnSortear");
   const somBola = document.getElementById("somBola");
