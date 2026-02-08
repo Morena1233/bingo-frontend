@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
-<meta charset="UTF-8">
-  <title>Sorteio ao Vivo | Bingo Vem Fazer a Moeda</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <title>Sorteio ao Vivo</title>
+  <link rel="stylesheet" href="css/sorteio.css">
 </head>
-<body class="sorteio">
+<body>
 
-  <h1>🎰 SORTEIO AO VIVO</h1>
+<h1>SORTEIO AO VIVO</h1>
 
-  <div id="globo3d"></div>
-<span id="numero">--</span>
-<button onclick="sortearNumero()">SORTEAR NÚMERO</button>
-
-    <div id="historico">
-  <h2>Últimos números</h2>
-  <div id="listaNumeros"></div>
+<div class="bola-container">
+  <div id="bola" class="bola">?</div>
 </div>
 
-    <span id="numero">--</span>
-  </div>
+<button onclick="sortear()">SORTEAR BOLA</button>
 
-  <button onclick="sortearNumero()">SORTEAR NÚMERO</button>
+<h2>Últimos números</h2>
+<div id="historico" class="historico"></div>
 
-  <script src="js/sorteio.js"></script>
+<script src="js/sorteio.js"></script>
 </body>
 </html>
+
 
 
