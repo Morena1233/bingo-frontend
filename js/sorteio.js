@@ -15,6 +15,17 @@ function carregarEstado() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  carregarEstado();
+
+// reconstruir histórico visual
+numerosSorteados.forEach(numero => {
+  const item = document.createElement("div");
+  item.className = "numero-sorteado";
+  item.textContent = numero;
+  item.style.background = corPorNumero(numero);
+  lista.appendChild(item);
+});
+
 
   // números disponíveis
   let numerosDisponiveis = [];
