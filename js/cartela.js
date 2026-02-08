@@ -24,3 +24,9 @@ function salvarCartela() {
   localStorage.setItem("cartela", JSON.stringify(cartela));
   alert("Cartela salva!");
 }
+{
+  id: "CART-123456",
+  numeros: [3, 8, 12, 19, 25, ...], // 30 números
+  compradaEm: "2026-02-08T18:30",
+  status: "ativa"
+}
