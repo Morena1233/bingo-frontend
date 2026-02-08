@@ -15,7 +15,37 @@ function corPorNumero(n) {
 }
 
 // sorteio
+function let numerosSorteados = [];
+
 function sortearNumero() {
+  if (numerosDisponiveis.length === 0) {
+    alert("Todos os números já foram sorteados!");
+    return;
+  }
+
+  const index = Math.floor(Math.random() * numerosDisponiveis.length);
+  const numero = numerosDisponiveis.splice(index, 1)[0];
+
+  numerosSorteados.push(numero);
+
+  const bola = document.getElementById("bola");
+  const lista = document.getElementById("listaNumeros");
+
+  bola.classList.remove("bola-bingo");
+  void bola.offsetWidth;
+  bola.classList.add("bola-bingo");
+
+  bola.textContent = numero;
+  bola.style.background = corPorNumero(numero);
+
+  // adiciona na lista
+  const span = document.createElement("div");
+  span.className = "numero-sorteado";
+  span.textContent = numero;
+  span.style.background = corPorNumero(numero);
+  lista.appendChild(span);
+}
+ {
   if (numerosDisponiveis.length === 0) {
     alert("Todos os números já foram sorteados!");
     return;
