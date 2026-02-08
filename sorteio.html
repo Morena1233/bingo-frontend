@@ -3,32 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>Sorteio ao Vivo</title>
-  <link rel="stylesheet" href="css/sorteio.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>SORTEIO AO VIVO</h1>
-<div class="sorteio-area">
-  <div id="bola" class="bola-bingo">?</div>
-</div>
+  <h1 style="color:#ffd700; text-align:center;">🎰 SORTEIO AO VIVO 🎰</h1>
 
-<button onclick="sortearNumero()">SORTEAR</button>
+  <div class="sorteio-area">
+    <div id="bola" class="bola-bingo">?</div>
+  </div>
 
- 
+  <!-- botão TEMPORÁRIO (depois vira ADM) -->
+  <div style="text-align:center;">
+    <button id="btnSortear">SORTEAR</button>
+  </div>
 
-
-<div class="bola-container">
-  <div id="bola" class="bola">?</div>
-</div>
-
-<button onclick="sortear()">SORTEAR BOLA</button>
-
-<h2>Últimos números</h2>
-<div id="historico" class="historico"></div>
-
-<script src="js/sorteio.js"></script>
+  <!-- JS -->
+  <script src="js/sorteio.js"></script>
 </body>
 </html>
+
+
 
 
 
