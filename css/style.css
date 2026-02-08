@@ -90,16 +90,24 @@ button {
   max-width: 600px;
 }
 .numero-sorteado {
-  width: 50px;
-  height: 50px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   color: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+
+  box-shadow:
+    inset -3px -3px 6px rgba(0,0,0,0.35),
+    inset 3px 3px 6px rgba(255,255,255,0.25),
+    0 4px 8px rgba(0,0,0,0.6);
+
+  animation: surgir 0.3s ease-out;
 }
 
 
