@@ -1,3 +1,19 @@
+// ===== LOCAL STORAGE =====
+function salvarEstado() {
+  localStorage.setItem("numerosDisponiveis", JSON.stringify(numerosDisponiveis));
+  localStorage.setItem("numerosSorteados", JSON.stringify(numerosSorteados));
+}
+
+function carregarEstado() {
+  const disponiveis = localStorage.getItem("numerosDisponiveis");
+  const sorteados = localStorage.getItem("numerosSorteados");
+
+  if (disponiveis && sorteados) {
+    numerosDisponiveis = JSON.parse(disponiveis);
+    numerosSorteados = JSON.parse(sorteados);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
   // números disponíveis
