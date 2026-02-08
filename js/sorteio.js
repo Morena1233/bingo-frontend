@@ -1,82 +1,52 @@
-// ==============================
-// CONFIGURAÇÃO DO BINGO
-// ==============================
-const TOTAL_NUMEROS = 30;
+document.addEventListener("DOMContentLoaded", function () {
 
-// ==============================
-// VARIÁVEIS
-// ==============================
-let numerosDisponiveis = [];
-let numerosSorteados = [];
+  // números disponíveis
+  let numerosDisponiveis = [];
+  let numerosSorteados = [];
 
-// ==============================
-// ELEMENTOS DA TELA
-// ==============================
-const bolaAtual = document.getElementById("bola-atual");
-const listaSorteados = document.getElementById("lista-sorteados");
-const btnSortear = document.getElementById("btn-sortear");
-
-// ==============================
-// INICIALIZAÇÃO
-// ==============================
-function iniciarBingo() {
-  numerosDisponiveis = [];
-  numerosSorteados = [];
-  listaSorteados.innerHTML = "";
-
-  for (let i = 1; i <= TOTAL_NUMEROS; i++) {
+  for (let i = 1; i <= 75; i++) {
     numerosDisponiveis.push(i);
   }
 
-  bolaAtual.textContent = "?";
-}
+  const bola = document.getElementById("bola");
+  const lista = document.getElementById("listaNumeros");
+  const botao = document.getElementById("btnSortear");
 
-iniciarBingo();
-
-// ==============================
-// FUNÇÃO DE SORTEIO
-// ==============================
-function sortearNumero() {
-  if (numerosDisponiveis.length === 0) {
-    alert("Todos os números já foram sorteados!");
-    return;
+  function corPorNumero(n) {
+    if (n <= 15) return "#e74c3c";
+    if (n <= 30) return "#3498db";
+    if (n <= 45) return "#2ecc71";
+    if (n <= 60) return "#f1c40f";
+    return "#9b59b6";
   }
 
-  const indice = Math.floor(Math.random() * numerosDisponiveis.length);
-  const numero = numerosDisponiveis[indice];
+  function sortearNumero() {
+    if (numerosDisponiveis.length === 0) {
+      alert("Todos os números já foram sorteados!");
+      return;
+    }
 
-  // Remove dos disponíveis
-  numerosDisponiveis.splice(indice, 1);
+    const index = Math.floor(Math.random() * numerosDisponiveis.length);
+    const numero = numerosDisponiveis.splice(index, 1)[0];
 
-  // Salva nos sorteados
-  numerosSorteados.push(numero);
+    numerosSorteados.push(numero);
 
-  // Mostra na bola gigante
-  bolaAtual.textContent = numero;
+    // atualiza bola
+    bola.classList.remove("bola-bingo");
+    void bola.offsetWidth;
+    bola.classList.add("bola-bingo");
 
-  // Atualiza histórico
-  atualizarLista();
-}
+    bola.textContent = numero;
+    bola.style.background = corPorNumero(numero);
 
-// ==============================
-// ATUALIZA A LISTA DE SORTEADOS
-// ==============================
-function atualizarLista() {
-  listaSorteados.innerHTML = "";
+    // adiciona ao histórico
+    const item = document.createElement("div");
+    item.className = "numero-sorteado";
+    item.textContent = numero;
+    item.style.background = corPorNumero(numero);
+    lista.appendChild(item);
+  }
 
-  numerosSorteados.forEach(num => {
-    const span = document.createElement("span");
-    span.classList.add("bola-pequena");
-    span.textContent = num;
-    listaSorteados.appendChild(span);
-  });
-}
+  botao.addEventListener("click", sortearNumero);
 
-// ==============================
-// EVENTO DO BOTÃO
-// ==============================
-btnSortear.addEventListener("click", sortearNumero);
-
-
-
-
+});
