@@ -81,3 +81,12 @@ button {
   justify-content: center;
   margin: 5px;
 }
+#listaNumeros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+  max-width: 600px;
+}
+
