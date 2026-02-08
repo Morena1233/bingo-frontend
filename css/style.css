@@ -109,5 +109,14 @@ button {
 
   animation: surgir 0.3s ease-out;
 }
+.bingo-final {
+  animation: piscar 0.5s infinite alternate;
+}
+
+@keyframes piscar {
+  from { background: #111; }
+  to { background: #0f5132; }
+}
+
 
 
