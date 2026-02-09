@@ -140,6 +140,18 @@ button {
   border-radius: 6px;
   font-weight: bold;
 }
+.topo {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+#areaCarrinho, #areaMinhasCartelas {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
 
 
 
