@@ -45,6 +45,25 @@ function pagarCartelas() {
   atualizarQtdCarrinho();
   alert("Pagamento confirmado!");
 }
+btnMinhasCartelas.onclick = () => {
+  areaCarrinho.style.display = "none";
+  areaMinhasCartelas.style.display = "block";
+
+  areaMinhasCartelas.innerHTML = "<h3>🎟️ Minhas Cartelas</h3>";
+
+  if (cartelasPagas.length === 0) {
+    areaMinhasCartelas.innerHTML += "<p>Nenhuma cartela comprada</p>";
+    return;
+  }
+
+  cartelasPagas.forEach(c => {
+    areaMinhasCartelas.innerHTML += `
+      <p>ID: ${c.id} – Números: ${c.numeros.join(", ")}</p>
+    `;
+  });
+};
+
+
 
 
 
