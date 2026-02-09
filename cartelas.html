@@ -2,62 +2,85 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Comprar Cartelas</title>
+<title>Comprar Cartela</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-image: url("img/fundo-cartela.jpg");
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
+  background: radial-gradient(circle at top, #1a0000, #000);
+  color: #fff;
 }
 
 .container {
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  padding: 20px;
-  max-width: 900px;
+  max-width: 1100px;
   margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: gold;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.numero {
+  background: #222;
+  border: 2px solid gold;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.numero.selecionado {
+  background: gold;
+  color: #000;
+}
+
+.cartela {
+  margin-top: 30px;
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
   border-radius: 12px;
 }
 
-h1, h2 {
-  text-align: center;
+.cartela-numeros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-input, button {
-  padding: 8px;
-  margin: 5px;
-  border-radius: 6px;
-  border: none;
+.cartela-numeros span {
+  background: gold;
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-weight: bold;
 }
 
 button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  background: gold;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
 }
 
-#areaCartelas {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.cartela {
-  background: rgba(255,255,255,0.9);
-  color: #000;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
-  width: 260px;
-}
-
-.cartela input {
-  width: 45px;
-  margin: 3px;
-  text-align: center;
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
 }
 </style>
 </head>
@@ -65,87 +88,79 @@ button {
 <body>
 
 <div class="container">
-  <h1>Comprar Cartelas</h1>
+  <h1>Escolha seus números</h1>
+  <p>Selecione <b>30 números</b> para montar sua cartela</p>
 
-  <label>Quantidade de cartelas:</label>
-  <input type="number" id="qtdCartelas" min="1" max="10" value="1">
-  <br>
-  <button id="btnCriar">Criar Cartelas</button>
+  <div class="grid" id="gridNumeros"></div>
 
-  <div id="areaCartelas"></div>
+  <div class="cartela">
+    <h2>Sua cartela</h2>
+    <div class="cartela-numeros" id="cartela"></div>
+    <p id="contador">0 / 30 números escolhidos</p>
+  </div>
 
-  <button id="btnComprar">COMPRAR CARTELAS</button>
+  <button id="btnComprar" disabled>COMPRAR CARTELA</button>
 </div>
 
 <script>
-document.getElementById("btnCriar").addEventListener("click", criarCartelas);
-document.getElementById("btnComprar").addEventListener("click", comprarCartelas);
+const TOTAL_NUMEROS = 30;
+const selecionados = [];
 
-function criarCartelas() {
-  const qtd = Number(document.getElementById("qtdCartelas").value);
-  const area = document.getElementById("areaCartelas");
-  area.innerHTML = "";
+const grid = document.getElementById("gridNumeros");
+const cartelaDiv = document.getElementById("cartela");
+const contador = document.getElementById("contador");
+const btnComprar = document.getElementById("btnComprar");
 
-  for (let c = 0; c < qtd; c++) {
-    const div = document.createElement("div");
-    div.className = "cartela";
-    div.innerHTML = `<h3>Cartela ${c + 1}</h3>`;
+// cria números 1 a 75
+for (let i = 1; i <= 75; i++) {
+  const div = document.createElement("div");
+  div.className = "numero";
+  div.innerText = i;
 
-    for (let i = 0; i < 15; i++) {
-      const input = document.createElement("input");
-      input.type = "number";
-      input.min = 1;
-      input.max = 75;
-      input.placeholder = "Nº";
-      div.appendChild(input);
-    }
-
-    area.appendChild(div);
-  }
+  div.onclick = () => selecionarNumero(i, div);
+  grid.appendChild(div);
 }
 
-function comprarCartelas() {
-  const cartelas = [];
-  const grupos = document.querySelectorAll(".cartela");
+function selecionarNumero(numero, elemento) {
+  const index = selecionados.indexOf(numero);
 
-  if (grupos.length === 0) {
-    alert("Crie as cartelas primeiro!");
-    return;
+  if (index === -1) {
+    if (selecionados.length >= TOTAL_NUMEROS) return;
+
+    selecionados.push(numero);
+    elemento.classList.add("selecionado");
+  } else {
+    selecionados.splice(index, 1);
+    elemento.classList.remove("selecionado");
   }
 
-  grupos.forEach((grupo, index) => {
-    const numeros = [];
-    grupo.querySelectorAll("input").forEach(input => {
-      const n = Number(input.value);
-      if (n >= 1 && n <= 75) numeros.push(n);
-    });
+  atualizarCartela();
+}
 
-    if (numeros.length !== 15) {
-      alert(`Cartela ${index + 1} incompleta`);
-      throw new Error();
-    }
+function atualizarCartela() {
+  cartelaDiv.innerHTML = "";
+  selecionados.sort((a, b) => a - b);
 
-    const unicos = new Set(numeros);
-    if (unicos.size !== 15) {
-      alert(`Cartela ${index + 1} tem números repetidos`);
-      throw new Error();
-    }
-
-    cartelas.push({
-      id: Date.now() + index,
-      numeros,
-      marcados: []
-    });
+  selecionados.forEach(n => {
+    const span = document.createElement("span");
+    span.innerText = n;
+    cartelaDiv.appendChild(span);
   });
 
-  localStorage.setItem("cartelasCompradas", JSON.stringify(cartelas));
-
-  document.body.style.backgroundImage = "url('img/fundo-confirmacao.jpg')";
-  document.querySelector(".container").innerHTML = `
-    <h2>🎉 Cartelas compradas com sucesso!</h2>
-    <p>Boa sorte no bingo!</p>
-  `;
+  contador.innerText = `${selecionados.length} / ${TOTAL_NUMEROS} números escolhidos`;
+  btnComprar.disabled = selecionados.length !== TOTAL_NUMEROS;
 }
+
+btnComprar.onclick = () => {
+  const cartela = {
+    id: Date.now(),
+    numeros: selecionados,
+    marcados: []
+  };
+
+  localStorage.setItem("cartelaComprada", JSON.stringify(cartela));
+  alert("🎉 Cartela comprada com sucesso!");
+};
 </script>
 
 </body>
