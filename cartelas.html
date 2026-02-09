@@ -2,13 +2,13 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Comprar Cartelas</title>
+<title>Compra de Cartelas</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top, #1a0000, #000);
+  background: radial-gradient(circle at top, #2b0000, #000);
   color: #fff;
 }
 
@@ -18,25 +18,31 @@ body {
   padding: 20px;
 }
 
-h1 {
+h1, h2 {
   text-align: center;
   color: gold;
 }
 
-label {
-  font-weight: bold;
+input, button {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
 }
 
-select {
-  padding: 8px;
-  border-radius: 6px;
+button {
+  background: gold;
+  font-weight: bold;
+  cursor: pointer;
 }
+
+.hidden { display: none; }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   gap: 8px;
-  margin-top: 20px;
 }
 
 .numero {
@@ -44,52 +50,36 @@ select {
   border: 2px solid gold;
   padding: 12px;
   text-align: center;
-  font-weight: bold;
-  cursor: pointer;
   border-radius: 8px;
+  cursor: pointer;
 }
 
-.numero.selecionado {
+.numero.sel {
   background: gold;
   color: #000;
 }
 
 .cartela {
-  margin-top: 25px;
+  margin-top: 15px;
   background: rgba(255,255,255,0.1);
-  padding: 15px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
-.cartela-numeros {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.cartela-numeros span {
+.cartela span {
   background: gold;
   color: #000;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 20px;
-  font-weight: bold;
+  margin: 3px;
+  display: inline-block;
 }
 
-button {
-  margin-top: 15px;
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  background: gold;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-button:disabled {
-  background: #555;
-  cursor: not-allowed;
+.carrinho {
+  margin-top: 20px;
+  background: rgba(0,0,0,0.6);
+  padding: 15px;
+  border-radius: 10px;
 }
 </style>
 </head>
@@ -97,119 +87,136 @@ button:disabled {
 <body>
 
 <div class="container">
-  <h1>Comprar Cartelas</h1>
 
-  <label>Quantidade de cartelas:</label>
-  <select id="qtdCartelas">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-  </select>
+<h1>Bingo Online</h1>
 
-  <p id="infoCartela"></p>
+<!-- CADASTRO -->
+<div id="cadastro">
+  <h2>Cadastro</h2>
+  <input id="nome" placeholder="Nome completo">
+  <input id="celular" placeholder="Celular">
+  <input id="cpf" placeholder="CPF">
+  <label>
+    <input type="checkbox" id="maior"> Declaro ser maior de 18 anos
+  </label>
+  <button onclick="validarCadastro()">Continuar</button>
+</div>
 
-  <div class="grid" id="gridNumeros"></div>
+<!-- ESCOLHA -->
+<div id="escolha" class="hidden">
+  <h2>Como deseja sua cartela?</h2>
+  <button onclick="modoManual()">Escolher números</button>
+  <button onclick="modoAutomatico()">Gerar automática</button>
+</div>
 
-  <div class="cartela">
-    <h2>Cartela atual</h2>
-    <div class="cartela-numeros" id="cartela"></div>
-    <p id="contador">0 / 30 números</p>
-  </div>
+<!-- MANUAL -->
+<div id="manual" class="hidden">
+  <h2>Escolha 30 números</h2>
+  <div class="grid" id="grid"></div>
+  <p id="cont">0 / 30</p>
+  <button onclick="salvarCartela()">Adicionar ao carrinho</button>
+</div>
 
-  <button id="btnSalvar" disabled>Salvar Cartela</button>
-  <button id="btnFinalizar" style="display:none">FINALIZAR COMPRA</button>
+<!-- CARRINHO -->
+<div class="carrinho hidden" id="carrinho">
+  <h2>Carrinho</h2>
+  <div id="lista"></div>
+  <button onclick="finalizar()">Finalizar Compra</button>
+</div>
+
 </div>
 
 <script>
-const TOTAL_NUMEROS = 30;
-const grid = document.getElementById("gridNumeros");
-const cartelaDiv = document.getElementById("cartela");
-const contador = document.getElementById("contador");
-const btnSalvar = document.getElementById("btnSalvar");
-const btnFinalizar = document.getElementById("btnFinalizar");
-const infoCartela = document.getElementById("infoCartela");
-const selectQtd = document.getElementById("qtdCartelas");
-
+const TOTAL = 30;
 let selecionados = [];
-let cartelas = [];
-let cartelaAtual = 1;
+let carrinho = [];
 
-// cria grid 1 a 75
-for (let i = 1; i <= 75; i++) {
-  const div = document.createElement("div");
-  div.className = "numero";
-  div.innerText = i;
-  div.onclick = () => clicarNumero(i, div);
-  grid.appendChild(div);
-}
-
-atualizarInfo();
-
-function clicarNumero(numero, elemento) {
-  const idx = selecionados.indexOf(numero);
-
-  if (idx === -1) {
-    if (selecionados.length >= TOTAL_NUMEROS) return;
-    selecionados.push(numero);
-    elemento.classList.add("selecionado");
-  } else {
-    selecionados.splice(idx, 1);
-    elemento.classList.remove("selecionado");
-  }
-
-  atualizarCartela();
-}
-
-function atualizarCartela() {
-  cartelaDiv.innerHTML = "";
-  selecionados.sort((a,b) => a-b);
-
-  selecionados.forEach(n => {
-    const span = document.createElement("span");
-    span.innerText = n;
-    cartelaDiv.appendChild(span);
-  });
-
-  contador.innerText = `${selecionados.length} / ${TOTAL_NUMEROS} números`;
-  btnSalvar.disabled = selecionados.length !== TOTAL_NUMEROS;
-}
-
-function atualizarInfo() {
-  infoCartela.innerText = `Montando cartela ${cartelaAtual} de ${selectQtd.value}`;
-}
-
-btnSalvar.onclick = () => {
-  cartelas.push({
-    id: Date.now(),
-    numeros: [...selecionados],
-    marcados: []
-  });
-
-  cartelaAtual++;
-
-  if (cartelaAtual > Number(selectQtd.value)) {
-    btnFinalizar.style.display = "block";
-    btnSalvar.style.display = "none";
-    grid.style.display = "none";
-    infoCartela.innerText = "Todas as cartelas prontas!";
+function validarCadastro() {
+  if (!nome.value || !celular.value || !cpf.value || !maior.checked) {
+    alert("Preencha tudo e confirme ser maior de 18");
     return;
   }
+  localStorage.setItem("cliente", JSON.stringify({
+    nome: nome.value,
+    celular: celular.value,
+    cpf: cpf.value
+  }));
+  cadastro.classList.add("hidden");
+  escolha.classList.remove("hidden");
+}
 
-  // reset para próxima cartela
+function modoManual() {
+  escolha.classList.add("hidden");
+  manual.classList.remove("hidden");
+  criarGrid();
+}
+
+function criarGrid() {
+  grid.innerHTML = "";
+  for (let i = 1; i <= 75; i++) {
+    const d = document.createElement("div");
+    d.className = "numero";
+    d.innerText = i;
+    d.onclick = () => toggleNumero(i, d);
+    grid.appendChild(d);
+  }
+}
+
+function toggleNumero(n, el) {
+  const idx = selecionados.indexOf(n);
+  if (idx === -1) {
+    if (selecionados.length >= TOTAL) return;
+    selecionados.push(n);
+    el.classList.add("sel");
+  } else {
+    selecionados.splice(idx,1);
+    el.classList.remove("sel");
+  }
+  cont.innerText = `${selecionados.length} / ${TOTAL}`;
+}
+
+function modoAutomatico() {
+  const nums = [];
+  while (nums.length < TOTAL) {
+    const r = Math.floor(Math.random()*75)+1;
+    if (!nums.includes(r)) nums.push(r);
+  }
+  adicionarCarrinho(nums);
+}
+
+function salvarCartela() {
+  if (selecionados.length !== TOTAL) {
+    alert("Selecione 30 números");
+    return;
+  }
+  adicionarCarrinho(selecionados);
   selecionados = [];
-  document.querySelectorAll(".numero").forEach(n => n.classList.remove("selecionado"));
-  atualizarCartela();
-  atualizarInfo();
-};
+  manual.classList.add("hidden");
+  carrinhoDiv();
+}
 
-btnFinalizar.onclick = () => {
-  localStorage.setItem("cartelasCompradas", JSON.stringify(cartelas));
-  alert("🎉 Cartelas compradas com sucesso!");
-};
+function adicionarCarrinho(nums) {
+  carrinho.push({
+    id: "CART-" + Date.now(),
+    numeros: nums
+  });
+  carrinhoDiv();
+}
+
+function carrinhoDiv() {
+  carrinhoDiv = document.getElementById("carrinho");
+  carrinhoDiv.classList.remove("hidden");
+  lista.innerHTML = "";
+  carrinho.forEach(c => {
+    lista.innerHTML += `<p>ID: ${c.id} (${c.numeros.length} números)</p>`;
+  });
+}
+
+function finalizar() {
+  localStorage.setItem("cartelasCompradas", JSON.stringify(carrinho));
+  alert("Compra finalizada com sucesso!");
+}
 </script>
 
 </body>
 </html>
-
