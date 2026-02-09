@@ -35,5 +35,17 @@ btnCarrinho.onclick = () => {
 
   document.getElementById("pagar").onclick = pagarCartelas;
 };
+function pagarCartelas() {
+  cartelasPagas = cartelasPagas.concat(carrinho);
+  carrinho = [];
+
+  localStorage.setItem("cartelasPagas", JSON.stringify(cartelasPagas));
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+  atualizarQtdCarrinho();
+  alert("Pagamento confirmado!");
+}
+
+
 
 
