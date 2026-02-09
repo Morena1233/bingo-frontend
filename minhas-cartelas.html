@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Minhas Cartelas</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #001a33, #000);
+  color: #fff;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: gold;
+}
+
+.cartela {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+.cartela span {
+  background: gold;
+  color: #000;
+  padding: 6px 10px;
+  border-radius: 20px;
+  margin: 3px;
+  display: inline-block;
+}
+
+button {
+  padding: 10px;
+  background: gold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🎟️ Minhas Cartelas</h1>
+  <div id="lista"></div>
+  <button onclick="voltar()">Voltar</button>
+</div>
+
+<script>
+function carregarMinhas() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+  const pagas = carrinho.filter(c => c.status === "pago");
+
+  if (pagas.length === 0) {
+    lista.innerHTML = "<p>Nenhuma cartela paga ainda</p>";
+    return;
+  }
+
+  pagas.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "cartela";
+
+    div.innerHTML = `
+      <p><b>ID:</b> ${c.id}</p>
+      <div>${c.numeros.map(n => `<span>${n}</span>`).join("")}</div>
+    `;
+
+    lista.appendChild(div);
+  });
+}
+
+function voltar() {
+  window.location.href = "cartelas.html";
+}
+
+carregarMinhas();
+</script>
+
+</body>
+</html>
