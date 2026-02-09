@@ -72,6 +72,30 @@ function adicionarCartela(numerosEscolhidos) {
   localStorage.setItem("carrinho", JSON.stringify(carrinho));
   atualizarQtdCarrinho();
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const btnContinuar = document.getElementById("btnContinuar");
+
+  if (!btnContinuar) return;
+
+  btnContinuar.onclick = () => {
+    const nome = document.getElementById("nome").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
+    const cpf = document.getElementById("cpf").value.trim();
+
+    if (!nome || !telefone || !cpf) {
+      alert("Preencha todos os campos");
+      return;
+    }
+
+    // salvar cliente
+    const cliente = { nome, telefone, cpf };
+    localStorage.setItem("cliente", JSON.stringify(cliente));
+
+    // ir para escolha das cartelas
+    window.location.href = "cartelas.html";
+  };
+});
+
 
 
 
