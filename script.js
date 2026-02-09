@@ -62,6 +62,18 @@ btnMinhasCartelas.onclick = () => {
     `;
   });
 };
+function adicionarCartela(numerosEscolhidos) {
+  const cartela = {
+    id: "CART-" + Date.now(),
+    numeros: numerosEscolhidos
+  };
+
+  carrinho.push(cartela);
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  atualizarQtdCarrinho();
+}
+
+
 
 
 
