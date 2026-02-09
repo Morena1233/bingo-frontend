@@ -108,4 +108,8 @@ function criarCampos() {
     area.appendChild(div);
   }
 }
+function criarCampos() { ... }
+
+function comprarCartelas() { ... }
+
 
