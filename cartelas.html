@@ -1,32 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Comprar Cartelas</title>
+<meta charset="UTF-8">
+<title>Comprar Cartelas</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-image: url("img/fundo-cartela.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  border-radius: 12px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+input, button {
+  padding: 8px;
+  margin: 5px;
+  border-radius: 6px;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#areaCartelas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cartela {
+  background: rgba(255,255,255,0.9);
+  color: #000;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  width: 260px;
+}
+
+.cartela input {
+  width: 45px;
+  margin: 3px;
+  text-align: center;
+}
+</style>
 </head>
 
 <body>
 
-<h2>Comprar Cartelas</h2>
+<div class="container">
+  <h1>Comprar Cartelas</h1>
 
-<label>Quantidade de cartelas:</label>
-<input type="number" id="qtdCartelas" min="1" max="10" value="1">
+  <label>Quantidade de cartelas:</label>
+  <input type="number" id="qtdCartelas" min="1" max="10" value="1">
+  <br>
+  <button id="btnCriar">Criar Cartelas</button>
 
-<button onclick="criarCampos()">Criar cartelas</button>
+  <div id="areaCartelas"></div>
 
-<div id="areaCartelas"></div>
+  <button id="btnComprar">COMPRAR CARTELAS</button>
+</div>
 
-<button onclick="comprarCartelas()">COMPRAR CARTELAS</button>
-
-<!-- 🔽 AQUI FICA TODO O JAVASCRIPT -->
 <script>
-function criarCampos() {
+document.getElementById("btnCriar").addEventListener("click", criarCartelas);
+document.getElementById("btnComprar").addEventListener("click", comprarCartelas);
+
+function criarCartelas() {
   const qtd = Number(document.getElementById("qtdCartelas").value);
   const area = document.getElementById("areaCartelas");
   area.innerHTML = "";
 
   for (let c = 0; c < qtd; c++) {
     const div = document.createElement("div");
+    div.className = "cartela";
     div.innerHTML = `<h3>Cartela ${c + 1}</h3>`;
 
     for (let i = 0; i < 15; i++) {
@@ -44,7 +106,12 @@ function criarCampos() {
 
 function comprarCartelas() {
   const cartelas = [];
-  const grupos = document.querySelectorAll("#areaCartelas > div");
+  const grupos = document.querySelectorAll(".cartela");
+
+  if (grupos.length === 0) {
+    alert("Crie as cartelas primeiro!");
+    return;
+  }
 
   grupos.forEach((grupo, index) => {
     const numeros = [];
@@ -55,13 +122,13 @@ function comprarCartelas() {
 
     if (numeros.length !== 15) {
       alert(`Cartela ${index + 1} incompleta`);
-      return;
+      throw new Error();
     }
 
     const unicos = new Set(numeros);
     if (unicos.size !== 15) {
       alert(`Cartela ${index + 1} tem números repetidos`);
-      return;
+      throw new Error();
     }
 
     cartelas.push({
@@ -72,11 +139,15 @@ function comprarCartelas() {
   });
 
   localStorage.setItem("cartelasCompradas", JSON.stringify(cartelas));
-  alert("Cartelas compradas com sucesso!");
+
+  document.body.style.backgroundImage = "url('img/fundo-confirmacao.jpg')";
+  document.querySelector(".container").innerHTML = `
+    <h2>🎉 Cartelas compradas com sucesso!</h2>
+    <p>Boa sorte no bingo!</p>
+  `;
 }
 </script>
-  <script src="js/cartelas.js"></script>
-
 
 </body>
 </html>
+
