@@ -85,3 +85,27 @@ document.addEventListener("DOMContentLoaded", function () {
   carregarCartelas();
 
 });
+<script>
+function criarCampos() {
+  const qtd = Number(document.getElementById("qtdCartelas").value);
+  const area = document.getElementById("areaCartelas");
+  area.innerHTML = "";
+
+  for (let c = 0; c < qtd; c++) {
+    const div = document.createElement("div");
+    div.innerHTML = `<h3>Cartela ${c + 1}</h3>`;
+
+    for (let i = 0; i < 15; i++) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = 1;
+      input.max = 75;
+      input.placeholder = "Nº";
+      input.className = "numero-cartela";
+      div.appendChild(input);
+    }
+
+    area.appendChild(div);
+  }
+}
+
