@@ -104,8 +104,10 @@ function criarCampos() {
       input.className = "numero-cartela";
       div.appendChild(input);
     }
-
-    area.appendChild(div);
+ area.appendChild(div);
   }
 }
+function criarCampos() { ... }
+function comprarCartelas() { ... }
+
 
