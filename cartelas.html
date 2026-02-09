@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Comprar Cartela</title>
+<title>Comprar Cartelas</title>
 
 <style>
 body {
@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: auto;
   padding: 20px;
 }
@@ -21,6 +21,15 @@ body {
 h1 {
   text-align: center;
   color: gold;
+}
+
+label {
+  font-weight: bold;
+}
+
+select {
+  padding: 8px;
+  border-radius: 6px;
 }
 
 .grid {
@@ -46,7 +55,7 @@ h1 {
 }
 
 .cartela {
-  margin-top: 30px;
+  margin-top: 25px;
   background: rgba(255,255,255,0.1);
   padding: 15px;
   border-radius: 12px;
@@ -67,10 +76,10 @@ h1 {
 }
 
 button {
-  margin-top: 20px;
+  margin-top: 15px;
   width: 100%;
-  padding: 15px;
-  font-size: 18px;
+  padding: 14px;
+  font-size: 16px;
   background: gold;
   border: none;
   border-radius: 12px;
@@ -88,49 +97,65 @@ button:disabled {
 <body>
 
 <div class="container">
-  <h1>Escolha seus números</h1>
-  <p>Selecione <b>30 números</b> para montar sua cartela</p>
+  <h1>Comprar Cartelas</h1>
+
+  <label>Quantidade de cartelas:</label>
+  <select id="qtdCartelas">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+  </select>
+
+  <p id="infoCartela"></p>
 
   <div class="grid" id="gridNumeros"></div>
 
   <div class="cartela">
-    <h2>Sua cartela</h2>
+    <h2>Cartela atual</h2>
     <div class="cartela-numeros" id="cartela"></div>
-    <p id="contador">0 / 30 números escolhidos</p>
+    <p id="contador">0 / 30 números</p>
   </div>
 
-  <button id="btnComprar" disabled>COMPRAR CARTELA</button>
+  <button id="btnSalvar" disabled>Salvar Cartela</button>
+  <button id="btnFinalizar" style="display:none">FINALIZAR COMPRA</button>
 </div>
 
 <script>
 const TOTAL_NUMEROS = 30;
-const selecionados = [];
-
 const grid = document.getElementById("gridNumeros");
 const cartelaDiv = document.getElementById("cartela");
 const contador = document.getElementById("contador");
-const btnComprar = document.getElementById("btnComprar");
+const btnSalvar = document.getElementById("btnSalvar");
+const btnFinalizar = document.getElementById("btnFinalizar");
+const infoCartela = document.getElementById("infoCartela");
+const selectQtd = document.getElementById("qtdCartelas");
 
-// cria números 1 a 75
+let selecionados = [];
+let cartelas = [];
+let cartelaAtual = 1;
+
+// cria grid 1 a 75
 for (let i = 1; i <= 75; i++) {
   const div = document.createElement("div");
   div.className = "numero";
   div.innerText = i;
-
-  div.onclick = () => selecionarNumero(i, div);
+  div.onclick = () => clicarNumero(i, div);
   grid.appendChild(div);
 }
 
-function selecionarNumero(numero, elemento) {
-  const index = selecionados.indexOf(numero);
+atualizarInfo();
 
-  if (index === -1) {
+function clicarNumero(numero, elemento) {
+  const idx = selecionados.indexOf(numero);
+
+  if (idx === -1) {
     if (selecionados.length >= TOTAL_NUMEROS) return;
-
     selecionados.push(numero);
     elemento.classList.add("selecionado");
   } else {
-    selecionados.splice(index, 1);
+    selecionados.splice(idx, 1);
     elemento.classList.remove("selecionado");
   }
 
@@ -139,7 +164,7 @@ function selecionarNumero(numero, elemento) {
 
 function atualizarCartela() {
   cartelaDiv.innerHTML = "";
-  selecionados.sort((a, b) => a - b);
+  selecionados.sort((a,b) => a-b);
 
   selecionados.forEach(n => {
     const span = document.createElement("span");
@@ -147,19 +172,41 @@ function atualizarCartela() {
     cartelaDiv.appendChild(span);
   });
 
-  contador.innerText = `${selecionados.length} / ${TOTAL_NUMEROS} números escolhidos`;
-  btnComprar.disabled = selecionados.length !== TOTAL_NUMEROS;
+  contador.innerText = `${selecionados.length} / ${TOTAL_NUMEROS} números`;
+  btnSalvar.disabled = selecionados.length !== TOTAL_NUMEROS;
 }
 
-btnComprar.onclick = () => {
-  const cartela = {
-    id: Date.now(),
-    numeros: selecionados,
-    marcados: []
-  };
+function atualizarInfo() {
+  infoCartela.innerText = `Montando cartela ${cartelaAtual} de ${selectQtd.value}`;
+}
 
-  localStorage.setItem("cartelaComprada", JSON.stringify(cartela));
-  alert("🎉 Cartela comprada com sucesso!");
+btnSalvar.onclick = () => {
+  cartelas.push({
+    id: Date.now(),
+    numeros: [...selecionados],
+    marcados: []
+  });
+
+  cartelaAtual++;
+
+  if (cartelaAtual > Number(selectQtd.value)) {
+    btnFinalizar.style.display = "block";
+    btnSalvar.style.display = "none";
+    grid.style.display = "none";
+    infoCartela.innerText = "Todas as cartelas prontas!";
+    return;
+  }
+
+  // reset para próxima cartela
+  selecionados = [];
+  document.querySelectorAll(".numero").forEach(n => n.classList.remove("selecionado"));
+  atualizarCartela();
+  atualizarInfo();
+};
+
+btnFinalizar.onclick = () => {
+  localStorage.setItem("cartelasCompradas", JSON.stringify(cartelas));
+  alert("🎉 Cartelas compradas com sucesso!");
 };
 </script>
 
