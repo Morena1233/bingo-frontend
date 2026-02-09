@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Carrinho</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #2b0000, #000);
+  color: #fff;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: gold;
+}
+
+.cartela {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+.cartela span {
+  background: gold;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 3px;
+  display: inline-block;
+}
+
+.status {
+  font-weight: bold;
+}
+
+button {
+  padding: 10px;
+  margin-top: 10px;
+  background: gold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🛒 Carrinho</h1>
+  <div id="lista"></div>
+  <button onclick="irMinhas()">Ir para Minhas Cartelas</button>
+</div>
+
+<script>
+function carregarCarrinho() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+  if (carrinho.length === 0) {
+    lista.innerHTML = "<p>Carrinho vazio</p>";
+    return;
+  }
+
+  carrinho.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "cartela";
+
+    div.innerHTML = `
+      <p><b>ID:</b> ${c.id}</p>
+      <p class="status">Status: ${c.status}</p>
+      <div>${c.numeros.map(n => `<span>${n}</span>`).join("")}</div>
+      ${c.status === "pendente"
+        ? `<button onclick="pagar('${c.id}')">PAGAR (Simulado)</button>`
+        : `<p>✅ Pago</p>`
+      }
+    `;
+
+    lista.appendChild(div);
+  });
+}
+
+function pagar(id) {
+  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+  carrinho = carrinho.map(c =>
+    c.id === id ? { ...c, status: "pago" } : c
+  );
+
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  alert("💰 Pagamento confirmado (simulado)");
+  carregarCarrinho();
+}
+
+function irMinhas() {
+  window.location.href = "minhas-cartelas.html";
+}
+
+carregarCarrinho();
+</script>
+
+</body>
+</html>
